@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Water Bucket Puzzle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="bg-blob bg-blob-a" aria-hidden="true"></div>
+    <div class="bg-blob bg-blob-b" aria-hidden="true"></div>
+
+    <main class="page">
+      <header class="hero">
+        <div class="hero-badge" aria-hidden="true">🪣</div>
+        <h1>Water Bucket Puzzle</h1>
+        <p class="tagline">
+          Get exactly <strong>{{ goal }} L</strong> in any bucket using fill, empty, and pour
+        </p>
+      </header>
+
+      <section class="card status-card">
+        <div class="status-row">
+          <span class="status-label">Moves</span>
+          <span id="step-count" class="status-value">0</span>
+        </div>
+        <p id="hint-text" class="hint" role="status"></p>
+        <p id="error-text" class="error" role="alert" hidden></p>
+        <div id="win-banner" class="win-banner" hidden>
+          <p>Puzzle solved!</p>
+          <button type="button" id="btn-play-again" class="btn btn-secondary">Play again</button>
+        </div>
+      </section>
+
+      <section class="buckets" id="buckets" aria-label="Buckets">
+        {% for bid in bucket_ids %}
+        <button
+          type="button"
+          class="bucket"
+          data-bucket="{{ bid }}"
+          aria-label="{{ bid }} liter bucket"
+        >
+          <div class="bucket-glass">
+            <div class="bucket-water" data-water="{{ bid }}"></div>
+          </div>
+          <span class="bucket-label"><span data-liters="{{ bid }}">0</span> / {{ capacities[bid] }} L</span>
+        </button>
+        {% endfor %}
+      </section>
+
+      <section class="card controls-card">
+        <div class="action-bar" role="group" aria-label="Actions">
+          <button type="button" class="btn btn-action is-active" data-action="fill">Fill</button>
+          <button type="button" class="btn btn-action" data-action="empty">Empty</button>
+          <button type="button" class="btn btn-action" data-action="pour">Pour</button>
+        </div>
+        <button type="button" id="btn-reset" class="btn btn-ghost">New game</button>
+      </section>
+
+      <section class="help card" aria-labelledby="help-heading">
+        <h2 id="help-heading">Help</h2>
+        <h3>About this app</h3>
+        <p>
+          You have three buckets — <strong>8 L</strong>, <strong>5 L</strong>, and
+          <strong>3 L</strong> — all starting empty. Measure exactly
+          <strong>{{ goal }} L</strong> in one bucket by filling from an imaginary tap,
+          emptying onto the ground, or pouring between buckets (no water is lost; pouring
+          stops when the source is empty or the destination is full).
+        </p>
+        <h3>How to play</h3>
+        <ol>
+          <li>Choose <strong>Fill</strong>, <strong>Empty</strong>, or <strong>Pour</strong>.</li>
+          <li>Click the bucket to act on (source).</li>
+          <li>For <strong>Pour</strong>, click a second bucket as the destination.</li>
+          <li>Try to win in as few moves as you can. Use <strong>New game</strong> to reset.</li>
+        </ol>
+      </section>
+    </main>
+
+    <script>
+      window.WATER_BUCKET_CONFIG = {
+        goal: {{ goal }},
+        capacities: {{ capacities | tojson }},
+        bucketIds: {{ bucket_ids | list | tojson }},
+      };
+    </script>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
