@@ -166,4 +166,13 @@ document.getElementById("btn-play-again").addEventListener("click", () => {
   void resetGame();
 });
 
+document.querySelectorAll("[data-help-jump]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.getElementById("help-heading")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  });
+});
+
 render();
